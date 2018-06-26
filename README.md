@@ -2,7 +2,7 @@ DinoCoin Core (fork PIVX) integration/staging repository
 ======================================
 
 
-It is recommended [use the shell script](https://github.com/lpcproject/lpcinstall) to install a DinoCoin Masternode on a Linux server running Ubuntu 14.04 or 16.04
+It is recommended [use the shell script](https://github.com/didys/lpcinstall) to install a DinoCoin Masternode on a Linux server running Ubuntu 14.04 or 16.04
 
 ***
 
@@ -19,7 +19,7 @@ Installation of libraries (using root user):
 Cloning the repository and compiling (use any user with the sudo group):
 
     cd
-    git clone https://github.com/lpcproject/DinoCoin.git
+    git clone https://github.com/didys/DinoCoin.git
     cd DinoCoin
     ./autogen.sh
     ./configure
@@ -45,7 +45,7 @@ Demon status:
 
 All binaries for different operating systems, you can download in the releases repository:
 
-https://github.com/lpcproject/DinoCoin/releases
+https://github.com/didys/DinoCoin/releases
 
 P2P port: 29997, RPC port: 29998
 -
