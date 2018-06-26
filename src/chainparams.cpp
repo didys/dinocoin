@@ -95,7 +95,7 @@ public:
         pchMessageStart[1] = 0x72;
         pchMessageStart[2] = 0x4f;
         pchMessageStart[3] = 0x5a;
-        vAlertPubKey = ParseHex("040d75796902e3eda97815d744328237872309a95b42a74b22d7580e56b086fbc19ae1d6ef30c9e27d060c9c48692a663b9a321161e19f853ca6a6499cba7d17f6");
+        vAlertPubKey = ParseHex("0440d662e59f83cbefd0feb5ded8b78d457d40227fca325dcbd63fd0f8083c87b8f00a80c697efceeacf23a5d3bf40a7d148b5c392d9eb84a18c7a0d5545c18876");
         nDefaultPort = 29997;
         bnProofOfWorkLimit = ~uint256(0) >> 20; // DinoCoin starting difficulty is 1 / 2^12
         nSubsidyHalvingInterval = 210000;
@@ -129,7 +129,7 @@ public:
         txNew.vout.resize(1);
         txNew.vin[0].scriptSig = CScript() << 486604799 << CScriptNum(4) << vector<unsigned char>((const unsigned char*)pszTimestamp, (const unsigned char*)pszTimestamp + strlen(pszTimestamp));
         txNew.vout[0].nValue = 50 * COIN;
-        txNew.vout[0].scriptPubKey = CScript() << ParseHex("0457c56ed69a1f42398804504fcab82f430cc864c8fc8cd25b76e141d12c13012ee9d500e11f84d5f75f5c669e88ca196142ddb7406d3635d840fa5e9d2a6bb100") << OP_CHECKSIG;
+        txNew.vout[0].scriptPubKey = CScript() << ParseHex("0440d662e59f83cbefd0feb5ded8b78d457d40227fca325dcbd63fd0f8083c87b8f00a80c697efceeacf23a5d3bf40a7d148b5c392d9eb84a18c7a0d5545c18876") << OP_CHECKSIG;
         genesis.vtx.push_back(txNew);
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
