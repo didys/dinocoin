@@ -1,0 +1,26 @@
+# /etc/conf.d/dinocoind: config file for /etc/init.d/dinocoind
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/dinocoin/dinocoin.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/dinocoind"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/dinocoind.pid"
+
+# Where to write dinocoind data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/dinocoind"
+
+# User and group to own dinocoind process
+#BITCOIND_USER="dinocoin"
+#BITCOIND_GROUP="dinocoin"
+
+# Path to dinocoind executable
+#BITCOIND_BIN="/usr/bin/dinocoind"
+
+# Nice value to run dinocoind under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS=""

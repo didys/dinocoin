@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=DinoCoin
+Comment=DinoCoin P2P Cryptocurrency
+Comment[fr]=DinoCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=DinoCoin, eşten eşe kriptografik sanal para birimi
+Exec=dinocoin-qt %u
+Terminal=false
+Type=Application
+Icon=dinocoin128
+MimeType=x-scheme-handler/dinocoin;
+Categories=Office;Finance;
