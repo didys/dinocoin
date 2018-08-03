@@ -1,4 +1,4 @@
-DinoCoin Core (fork PIVX) integration/staging repository
+DinoCoin Core (fork DINOCOIN) integration/staging repository
 ======================================
 
 
