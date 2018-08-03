@@ -18,7 +18,7 @@ For example:
   ./github-merge.py 3077
 
 (in any git repository) will help you merge pull request #3077 for the
-DINOCOIN-Project/DINOCOIN repository.
+DinoCoin-Project/DinoCoin repository.
 
 What it does:
 * Fetch master and the pull request.
@@ -36,16 +36,16 @@ couldn't mess with the sources.
 
 Setup
 ---------
-Configuring the github-merge tool for the DINOCOIN repository is done in the following way:
+Configuring the github-merge tool for the DinoCoin repository is done in the following way:
 
-    git config githubmerge.repository DINOCOIN-Project/DINOCOIN
+    git config githubmerge.repository DinoCoin-Project/DinoCoin
     git config githubmerge.testcmd "make -j4 check" (adapt to whatever you want to use for testing)
     git config --global user.signingkey mykeyid (if you want to GPG sign)
 
 optimize-pngs.py
 ================
 
-A script to optimize png files in the DINOCOIN
+A script to optimize png files in the DinoCoin
 repository (requires pngcrush).
 
 fix-copyright-headers.py

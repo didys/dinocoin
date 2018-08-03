@@ -1,5 +1,5 @@
 ---
-name: "dinocoin-linux-3.1"
+name: "dinocoin-linux-1.3"
 enable_cache: true
 suites:
 - "trusty"
@@ -29,7 +29,7 @@ packages:
 - "python"
 reference_datetime: "2015-06-01 00:00:00"
 remotes:
-- "url": "https://github.com/dinocoin-project/dinocoin.git"
+- "url": "https://github.com/dinocoinproject/dinocoin.git"
   "dir": "dinocoin"
 files: []
 script: |

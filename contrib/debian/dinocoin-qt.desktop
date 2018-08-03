@@ -1,9 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=DINOCOIN
-Comment=DINOCOIN P2P Cryptocurrency
-Comment[fr]=DINOCOIN, monnaie virtuelle cryptographique pair à pair
-Comment[tr]=DINOCOIN, eşten eşe kriptografik sanal para birimi
+Name=DinoCoin
+Comment=DinoCoin P2P Cryptocurrency
+Comment[fr]=DinoCoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=DinoCoin, eşten eşe kriptografik sanal para birimi
 Exec=dinocoin-qt %u
 Terminal=false
 Type=Application
