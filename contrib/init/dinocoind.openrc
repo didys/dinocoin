@@ -16,8 +16,8 @@ BITCOIND_USER=${BITCOIND_USER:-dinocoin}
 BITCOIND_GROUP=${BITCOIND_GROUP:-dinocoin}
 BITCOIND_BIN=${BITCOIND_BIN:-/usr/bin/dinocoind}
 
-name="DinoCoin Core Daemon"
-description="DinoCoin crypto-currency p2p network daemon"
+name="DINOCOIN Core Daemon"
+description="DINOCOIN crypto-currency p2p network daemon"
 
 command="/usr/bin/dinocoind"
 command_args="-pid=\"${BITCOIND_PIDFILE}\" \

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#  dinocoind The DinoCoin core server.
+#  dinocoind The DINOCOIN core server.
 #
 #
 # chkconfig: 345 80 20

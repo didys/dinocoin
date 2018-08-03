@@ -1,8 +1,8 @@
 Source: dinocoin
 Section: utils
 Priority: optional
-Maintainer: Julian Meyer <julian@dinocoin.io>
-Uploaders: Julian Meyer <julian@dinocoin.io>
+Maintainer: Jonas Smedegaard <dr@jones.dk> ***TODO***
+Uploaders: Micah Anderson <micah@debian.org> ***TODO***
 Build-Depends: debhelper,
  devscripts,
  automake,
@@ -23,8 +23,8 @@ Build-Depends: debhelper,
  libprotobuf-dev, protobuf-compiler
 Standards-Version: 3.9.2
 Homepage: http://www.dinocoin.org
-Vcs-Git: git://github.com/dinocoinproject/DinoCoin.git
-Vcs-Browser: http://github.com/dinocoinproject/DinoCoin
+Vcs-Git: git://github.com/DINOCOIN-Project/DINOCOIN.git
+Vcs-Browser: http://github.com/DINOCOIN-Project/DINOCOIN
 
 Package: dinocoind
 Architecture: any

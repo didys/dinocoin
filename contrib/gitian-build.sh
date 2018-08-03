@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright (c) 2016 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -7,6 +6,7 @@
 sign=false
 verify=false
 build=false
+setupenv=false
 
 # Systems to build
 linux=true
@@ -17,7 +17,7 @@ osx=true
 SIGNER=
 VERSION=
 commit=false
-url=https://github.com/dinocoinproject/dinocoin
+url=https://github.com/dinocoin-project/dinocoin
 proc=2
 mem=2000
 lxc=true
@@ -28,7 +28,7 @@ signProg="gpg --detach-sign"
 commitFiles=true
 
 # Help Message
-read -r -d '' usage <<- EOF
+read -d '' usage <<- EOF
 Usage: $scriptName [-c|u|v|b|s|B|o|h|j|m|] signer version
 
 Run this script from the directory containing the dinocoin, gitian-builder, gitian.sigs, and dinocoin-detached-sigs.
@@ -39,12 +39,12 @@ version		Version number, commit, or branch to build. If building a commit or bra
 
 Options:
 -c|--commit	Indicate that the version argument is for a commit or branch
--u|--url	Specify the URL of the repository. Default is https://github.com/dinocoinproject/dinocoin
+-u|--url	Specify the URL of the repository. Default is https://github.com/dinocoin-project/dinocoin
 -v|--verify 	Verify the gitian build
 -b|--build	Do a gitian build
 -s|--sign	Make signed binaries for Windows and Mac OSX
 -B|--buildsign	Build both signed and unsigned binaries
--o|--os		Specify which Operating Systems the build is for. Default is lwx. l for linux, w for windows, x for osx, a for aarch64
+-o|--os		Specify which Operating Systems the build is for. Default is lwx. l for linux, w for windows, x for osx
 -j		Number of processes to use. Default 2
 -m		Memory to allocate in MiB. Default 2000
 --kvm           Use KVM instead of LXC
@@ -92,7 +92,6 @@ while :; do
 		linux=false
 		windows=false
 		osx=false
-		aarch64=false
 		if [[ "$2" = *"l"* ]]
 		then
 		    linux=true
@@ -105,13 +104,9 @@ while :; do
 		then
 		    osx=true
 		fi
-		if [[ "$2" = *"a"* ]]
-		then
-		    aarch64=true
-		fi
 		shift
 	    else
-		printf 'Error: "--os" requires an argument containing an l (for linux), w (for windows), x (for Mac OSX), or a (for aarch64)\n'
+		echo 'Error: "--os" requires an argument containing an l (for linux), w (for windows), or x (for Mac OSX)\n'
 		exit 1
 	    fi
 	    ;;
@@ -196,7 +191,7 @@ then
 fi
 
 # Get signer
-if [[ -n "$1" ]]
+if [[ -n"$1" ]]
 then
     SIGNER=$1
     shift
@@ -231,16 +226,16 @@ if [[ $commit = false ]]
 then
 	COMMIT="v${VERSION}"
 fi
-echo "${COMMIT}"
+echo ${COMMIT}
 
 # Setup build environment
 if [[ $setup = true ]]
 then
     sudo apt-get install ruby apache2 git apt-cacher-ng python-vm-builder qemu-kvm qemu-utils
-    git clone https://github.com/dinocoinproject/gitian.sigs.git
-    git clone https://github.com/dinocoinproject/dinocoin-detached-sigs.git
+    git clone https://github.com/dinocoin-project/gitian.sigs.git
+    git clone https://github.com/dinocoin-project/dinocoin-detached-sigs.git
     git clone https://github.com/devrandom/gitian-builder.git
-    pushd ./gitian-builder || exit
+    pushd ./gitian-builder
     if [[ -n "$USE_LXC" ]]
     then
         sudo apt-get install lxc
@@ -248,30 +243,30 @@ then
     else
         bin/make-base-vm --suite trusty --arch amd64
     fi
-    popd || exit
+    popd
 fi
 
 # Set up build
-pushd ./dinocoin || exit
+pushd ./dinocoin
 git fetch
-git checkout "${COMMIT}"
-popd || exit
+git checkout ${COMMIT}
+popd
 
 # Build
 if [[ $build = true ]]
 then
 	# Make output folder
-	mkdir -p "./dinocoin-binaries/${VERSION}"
+	mkdir -p ./dinocoin-binaries/${VERSION}
 
 	# Build Dependencies
 	echo ""
 	echo "Building Dependencies"
 	echo ""
-	pushd ./gitian-builder || exit
+	pushd ./gitian-builder
 	mkdir -p inputs
 	wget -N -P inputs $osslPatchUrl
 	wget -N -P inputs $osslTarUrl
-	make -C ../dinocoin/depends download SOURCES_PATH="$(pwd)/cache/common"
+	make -C ../dinocoin/depends download SOURCES_PATH=`pwd`/cache/common
 
 	# Linux
 	if [[ $linux = true ]]
@@ -280,7 +275,7 @@ then
 	    echo "Compiling ${VERSION} Linux"
 	    echo ""
 	    ./bin/gbuild -j ${proc} -m ${mem} --commit dinocoin=${COMMIT} --url dinocoin=${url} ../dinocoin/contrib/gitian-descriptors/gitian-linux.yml
-	    ./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-linux.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-linux.yml
 	    mv build/out/dinocoin-*.tar.gz build/out/src/dinocoin-*.tar.gz ../dinocoin-binaries/${VERSION}
 	fi
 	# Windows
@@ -290,7 +285,7 @@ then
 	    echo "Compiling ${VERSION} Windows"
 	    echo ""
 	    ./bin/gbuild -j ${proc} -m ${mem} --commit dinocoin=${COMMIT} --url dinocoin=${url} ../dinocoin/contrib/gitian-descriptors/gitian-win.yml
-	    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-win.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-unsigned --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-win.yml
 	    mv build/out/dinocoin-*-win-unsigned.tar.gz inputs/dinocoin-win-unsigned.tar.gz
 	    mv build/out/dinocoin-*.zip build/out/dinocoin-*.exe ../dinocoin-binaries/${VERSION}
 	fi
@@ -301,21 +296,11 @@ then
 	    echo "Compiling ${VERSION} Mac OSX"
 	    echo ""
 	    ./bin/gbuild -j ${proc} -m ${mem} --commit dinocoin=${COMMIT} --url dinocoin=${url} ../dinocoin/contrib/gitian-descriptors/gitian-osx.yml
-	    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-osx.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-unsigned --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-osx.yml
 	    mv build/out/dinocoin-*-osx-unsigned.tar.gz inputs/dinocoin-osx-unsigned.tar.gz
 	    mv build/out/dinocoin-*.tar.gz build/out/dinocoin-*.dmg ../dinocoin-binaries/${VERSION}
 	fi
-	# AArch64
-	if [[ $aarch64 = true ]]
-	then
-	    echo ""
-	    echo "Compiling ${VERSION} AArch64"
-	    echo ""
-	    ./bin/gbuild -j ${proc} -m ${mem} --commit dinocoin=${COMMIT} --url dinocoin=${url} ../dinocoin/contrib/gitian-descriptors/gitian-aarch64.yml
-	    ./bin/gsign --signer $SIGNER --release ${VERSION}-aarch64 --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-aarch64.yml
-	    mv build/out/dinocoin-*.tar.gz build/out/src/dinocoin-*.tar.gz ../dinocoin-binaries/${VERSION}
-	fi
-	popd || exit
+	popd
 
         if [[ $commitFiles = true ]]
         then
@@ -323,13 +308,12 @@ then
             echo ""
             echo "Committing ${VERSION} Unsigned Sigs"
             echo ""
-            pushd gitian.sigs || exit
+            pushd gitian.sigs
             git add ${VERSION}-linux/${SIGNER}
-            git add ${VERSION}-aarch64/${SIGNER}
             git add ${VERSION}-win-unsigned/${SIGNER}
             git add ${VERSION}-osx-unsigned/${SIGNER}
             git commit -a -m "Add ${VERSION} unsigned sigs for ${SIGNER}"
-            popd || exit
+            popd
         fi
 fi
 
@@ -337,7 +321,7 @@ fi
 if [[ $verify = true ]]
 then
 	# Linux
-	pushd ./gitian-builder || exit
+	pushd ./gitian-builder
 	echo ""
 	echo "Verifying v${VERSION} Linux"
 	echo ""
@@ -352,11 +336,6 @@ then
 	echo "Verifying v${VERSION} Mac OSX"
 	echo ""
 	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-unsigned ../dinocoin/contrib/gitian-descriptors/gitian-osx.yml
-	# AArch64
-	echo ""
-	echo "Verifying v${VERSION} AArch64"
-	echo ""
-	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-aarch64 ../dinocoin/contrib/gitian-descriptors/gitian-aarch64.yml
 	# Signed Windows
 	echo ""
 	echo "Verifying v${VERSION} Signed Windows"
@@ -367,14 +346,14 @@ then
 	echo "Verifying v${VERSION} Signed Mac OSX"
 	echo ""
 	./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-osx-signed ../dinocoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-	popd || exit
+	popd
 fi
 
 # Sign binaries
 if [[ $sign = true ]]
 then
 
-        pushd ./gitian-builder || exit
+        pushd ./gitian-builder
 	# Sign Windows
 	if [[ $windows = true ]]
 	then
@@ -382,7 +361,7 @@ then
 	    echo "Signing ${VERSION} Windows"
 	    echo ""
 	    ./bin/gbuild -i --commit signature=${COMMIT} ../dinocoin/contrib/gitian-descriptors/gitian-win-signer.yml
-	    ./bin/gsign --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-win-signer.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-win-signer.yml
 	    mv build/out/dinocoin-*win64-setup.exe ../dinocoin-binaries/${VERSION}
 	    mv build/out/dinocoin-*win32-setup.exe ../dinocoin-binaries/${VERSION}
 	fi
@@ -393,21 +372,21 @@ then
 	    echo "Signing ${VERSION} Mac OSX"
 	    echo ""
 	    ./bin/gbuild -i --commit signature=${COMMIT} ../dinocoin/contrib/gitian-descriptors/gitian-osx-signer.yml
-	    ./bin/gsign --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-osx-signer.yml
+	    ./bin/gsign -p $signProg --signer $SIGNER --release ${VERSION}-osx-signed --destination ../gitian.sigs/ ../dinocoin/contrib/gitian-descriptors/gitian-osx-signer.yml
 	    mv build/out/dinocoin-osx-signed.dmg ../dinocoin-binaries/${VERSION}/dinocoin-${VERSION}-osx.dmg
 	fi
-	popd || exit
+	popd
 
         if [[ $commitFiles = true ]]
         then
             # Commit Sigs
-            pushd gitian.sigs || exit
+            pushd gitian.sigs
             echo ""
             echo "Committing ${VERSION} Signed Sigs"
             echo ""
             git add ${VERSION}-win-signed/${SIGNER}
             git add ${VERSION}-osx-signed/${SIGNER}
             git commit -a -m "Add ${VERSION} signed binary sigs for ${SIGNER}"
-            popd || exit
+            popd
         fi
 fi

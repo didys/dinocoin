@@ -1,5 +1,5 @@
 [Unit]
-Description=DinoCoin's distributed currency daemon
+Description=DINOCOIN's distributed currency daemon
 After=network.target
 
 [Service]

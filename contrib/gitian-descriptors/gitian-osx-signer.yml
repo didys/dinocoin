@@ -7,7 +7,7 @@ architectures:
 packages:
 - "faketime"
 remotes:
-- "url": "https://github.com/dinocoinproject/dinocoin-detached-sigs.git"
+- "url": "https://github.com/dinocoin-project/dinocoin-detached-sigs.git"
   "dir": "signature"
 files:
 - "dinocoin-osx-unsigned.tar.gz"
